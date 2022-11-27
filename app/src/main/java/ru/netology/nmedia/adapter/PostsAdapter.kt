@@ -1,14 +1,20 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.Switch
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import java.net.URL
+import kotlin.math.round
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -31,6 +37,45 @@ class PostsAdapter(
     }
 }
 
+
+fun ImageView.load(author: String){
+    val url = "http://10.0.2.2:9999/avatars/netology.jpg"
+    val url1 = "http://10.0.2.2:9999/avatars/sber.jpg"
+    val url2 = "http://10.0.2.2:9999/avatars/tcs.jpg"
+    val url3 = "http://10.0.2.2:9999/avatars/404.png"
+    when(author){
+        "Сбер" -> Glide.with(this)
+            .load(url1)
+            .circleCrop()
+            .placeholder(R.drawable.ic_loading_100dp)
+            .error(R.drawable.ic_error_100dp)
+            .timeout(10_000)
+            .into(this)
+        "Netology" -> Glide.with(this)
+            .load(url)
+            .circleCrop()
+            .placeholder(R.drawable.ic_loading_100dp)
+            .error(R.drawable.ic_error_100dp)
+            .timeout(10_000)
+            .into(this)
+        "Тинькофф" -> Glide.with(this)
+            .load(url2)
+            .circleCrop()
+            .placeholder(R.drawable.ic_loading_100dp)
+            .error(R.drawable.ic_error_100dp)
+            .timeout(10_000)
+            .into(this)
+        else -> Glide.with(this)
+            .load(url3)
+            .circleCrop()
+            .placeholder(R.drawable.ic_loading_100dp)
+            .error(R.drawable.ic_error_100dp)
+            .timeout(10_000)
+            .into(this)
+
+    }
+}
+
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener,
@@ -39,6 +84,7 @@ class PostViewHolder(
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
+            binding.avatar.load(post.author)
             published.text = post.published
             content.text = post.content
             // в адаптере
